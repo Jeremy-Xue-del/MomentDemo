@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/avatar"
+        android:layout_width="40dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:background="@drawable/avatar_style"
+        android:clipToOutline="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/avatar"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tool:src="@drawable/avatar" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:ellipsize="end"
+        android:gravity="start"
+        android:includeFontPadding="true"
+        android:maxLines="1"
+        android:text="Jeremy"
+        android:textColor="#009FFF"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/avatar"
+        app:layout_constraintTop_toTopOf="@id/avatar"
+        tool:text="JeremyJeremyJeremyJeremyJeremyJeremyJeremyJeremy" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/context"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:includeFontPadding="true"
+        android:maxLines="5"
+        android:text="评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评"
+        android:textColor="#1E1E1E"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@id/name"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/name"
+        app:layout_constraintTop_toBottomOf="@id/name"
+        tool:text="评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论评论" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/expand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:includeFontPadding="true"
+        android:text="展开"
+        android:textColor="#0011FF"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="@id/context"
+        app:layout_constraintTop_toBottomOf="@id/context"
+        tool:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/detail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toStartOf="@id/expand"
+        app:layout_constraintTop_toBottomOf="@id/expand"
+        app:layout_constraintWidth_percent="0.80" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginTop="10dp"
+        android:includeFontPadding="true"
+        android:text="昨天"
+        android:textColor="@color/gray"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@id/context"
+        app:layout_constraintTop_toBottomOf="@id/detail"
+        tool:text="昨天" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="30dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="10dp"
+        android:adjustViewBounds="false"
+        android:background="@drawable/more_button_style"
+        android:src="@drawable/icon_more"
+        app:layout_constraintBottom_toBottomOf="@id/time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/time" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
