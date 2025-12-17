@@ -1,12 +1,12 @@
 package com.jeremy.momentdemo.viewHolder
 
-import androidx.appcompat.widget.AppCompatImageView
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.RecyclerView
 import com.jeremy.momentdemo.R
+import com.jeremy.momentdemo.databinding.SquareImageBinding
 
-class MoreImage(itemView: ConstraintLayout) {
-    private val image: AppCompatImageView = itemView.findViewById(R.id.squareImage)
+class SquareImageHolder(val binding: SquareImageBinding) : RecyclerView.ViewHolder(binding.root) {
+
     fun bind(picture: Int) {
-        image.setImageResource(picture)
+        binding.ivSquareImage.setImageResource(R.mipmap.ic_launcher)
     }
 }

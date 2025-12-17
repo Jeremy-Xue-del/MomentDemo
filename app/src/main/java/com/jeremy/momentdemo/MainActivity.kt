@@ -19,10 +19,12 @@ class MainActivity : AppCompatActivity() {
         getMoment()
     }
 
+
     private fun getMoment() {
         val moments = MomentData().moments
-        val momentLayout = binding.moments
+        val momentLayout = binding.rvMoments
         momentLayout.layoutManager = LinearLayoutManager(this)
+        momentLayout.setItemViewCacheSize(20)
         val adapter = MomentAdapter(moments)
         momentLayout.adapter = adapter
     }

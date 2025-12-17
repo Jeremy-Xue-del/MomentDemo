@@ -5,55 +5,86 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jeremy.momentdemo.databinding.MomentItemBinding
+import com.jeremy.momentdemo.databinding.UserHeaderBinding
 import com.jeremy.momentdemo.model.MomentModel
 import com.jeremy.momentdemo.util.DateTimeFormat
 
 class MomentAdapter(private val momentList: List<MomentModel>) :
-    RecyclerView.Adapter<MomentAdapter.ViewHolder>() {
-    class ViewHolder(val binding: MomentItemBinding) : RecyclerView.ViewHolder(binding.root)
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+
+    companion object {
+        const val TYPE_HEADER = 0
+        const val TYPE_MOMENT = 1
+    }
+
+    class HeaderViewHolder(val binding: UserHeaderBinding) : RecyclerView.ViewHolder(binding.root)
+
+    class MomentViewHolder(val binding: MomentItemBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolder {
-        val binding = MomentItemBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return ViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(
-        holder: ViewHolder,
-        position: Int
-    ) {
-        val moment = momentList[position]
-        holder.binding.apply {
-            moment.name?.let {
-                name.text = it
-            }
-            moment.avatar?.let {
-                avatar.setImageResource(it)
-            }
-            moment.content?.let {
-                context.text = it
+    ): RecyclerView.ViewHolder {
+        return when (viewType) {
+            TYPE_HEADER -> {
+                val binding = UserHeaderBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                HeaderViewHolder(binding)
             }
 
-            detail.layoutManager =
-                GridLayoutManager(holder.itemView.context, getCount(position))
-            if (getCount(position) > 1) {
-                detail.addItemDecoration(GridItemDecoration(5, 5, getCount(position)))
-            } else {
-                detail.removeItemDecoration(GridItemDecoration(5, 5, getCount(position)))
+            TYPE_MOMENT -> {
+                val binding = MomentItemBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                MomentViewHolder(binding)
             }
-            val adapter = ImageAdapter(moment.photos)
-            detail.adapter = adapter
-            moment.time?.let { time.text = DateTimeFormat.formatMomentTime(it) }
+
+            else -> throw IllegalArgumentException("Unknown view type: $viewType")
         }
     }
 
-    override fun getItemCount() = momentList.size
+    override fun onBindViewHolder(
+        holder: RecyclerView.ViewHolder,
+        position: Int
+    ) {
+        when (holder) {
+            is HeaderViewHolder -> {
+                // 头部视图不需要额外绑定数据
+            }
+
+            is MomentViewHolder -> {
+                val momentPosition = position - 1 // 减去头部位置
+                val moment = momentList[momentPosition]
+                holder.binding.apply {
+                    moment.name?.let {
+                        tvName.text = it
+                    }
+                    moment.avatar?.let {
+                        ivAvatar.setImageResource(it)
+                    }
+                    moment.content?.let {
+                        tvContext.text = it
+                    }
+                    rvDetail.layoutManager =
+                        GridLayoutManager(holder.itemView.context, getCount(momentPosition))
+                    val adapter = ImageAdapter(moment.photos)
+                    rvDetail.adapter = adapter
+                    moment.time?.let { tvTime.text = DateTimeFormat.formatMomentTime(it) }
+                }
+            }
+        }
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) TYPE_HEADER else TYPE_MOMENT
+    }
+
+    override fun getItemCount() = momentList.size + 1 // 加上头部视图
 
     fun getCount(position: Int): Int {
         val moment = momentList[position]
@@ -63,6 +94,4 @@ class MomentAdapter(private val momentList: List<MomentModel>) :
             else -> 3
         }
     }
-
-
 }

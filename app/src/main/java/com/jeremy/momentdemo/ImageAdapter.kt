@@ -1,17 +1,21 @@
 package com.jeremy.momentdemo
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
-import com.jeremy.momentdemo.viewHolder.MoreImage
-import com.jeremy.momentdemo.viewHolder.SingleImage
+import com.jeremy.momentdemo.databinding.SingleImageBinding
+import com.jeremy.momentdemo.databinding.SquareImageBinding
+import com.jeremy.momentdemo.viewHolder.SquareImageHolder
+import com.jeremy.momentdemo.viewHolder.SingleImageHolder
 
 class ImageAdapter(private val pictures: List<Int>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+    companion object {
+        const val SINGLE_IMAGE = 1
+        const val MORE_IMAGE = 2
+    }
 
     override fun getItemViewType(position: Int): Int {
         return when (pictures.size) {
@@ -23,11 +27,26 @@ class ImageAdapter(private val pictures: List<Int>) :
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context)
+    ): RecyclerView.ViewHolder {
         return when (viewType) {
-            SINGLE_IMAGE -> ViewHolder(inflater.inflate(R.layout.single_image, parent, false))
-            MORE_IMAGE -> ViewHolder(inflater.inflate(R.layout.square_image, parent, false))
+            SINGLE_IMAGE -> {
+                val binding = SingleImageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                SingleImageHolder(binding)
+            }
+
+            MORE_IMAGE -> {
+                val binding = SquareImageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                SquareImageHolder(binding)
+            }
+
             else -> throw IllegalArgumentException("Invalid view type")
         }
     }
@@ -37,17 +56,17 @@ class ImageAdapter(private val pictures: List<Int>) :
         position: Int
     ) {
         val picture = pictures[position]
-        when (holder.itemViewType) {
-            SINGLE_IMAGE -> {
-                val singleImage =
-                    SingleImage(holder.itemView as androidx.appcompat.widget.AppCompatImageView)
-                singleImage.bind(picture)
+        when (holder) {
+            is SingleImageHolder -> {
+                holder.binding.apply {
+                    holder.bind(picture)
+                }
             }
 
-            MORE_IMAGE -> {
-                val mediumImage =
-                    MoreImage(holder.itemView as ConstraintLayout)
-                mediumImage.bind(picture)
+            is SquareImageHolder -> {
+                holder.binding.apply {
+                    holder.bind(picture)
+                }
             }
 
         }
@@ -55,8 +74,4 @@ class ImageAdapter(private val pictures: List<Int>) :
 
     override fun getItemCount() = pictures.size
 
-    companion object {
-        const val SINGLE_IMAGE = 1
-        const val MORE_IMAGE = 2
-    }
 }

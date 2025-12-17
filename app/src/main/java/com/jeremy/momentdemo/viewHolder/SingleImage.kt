@@ -1,11 +1,12 @@
 package com.jeremy.momentdemo.viewHolder
 
-import androidx.appcompat.widget.AppCompatImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.jeremy.momentdemo.R
+import com.jeremy.momentdemo.databinding.SingleImageBinding
 
-class SingleImage(itemView: AppCompatImageView) {
-    private val image: AppCompatImageView = itemView.findViewById(R.id.singleImage)
+class SingleImageHolder(val binding: SingleImageBinding) : RecyclerView.ViewHolder(binding.root) {
     fun bind(picture: Int) {
-        image.setImageResource(picture)
+        binding.ivSingleImage.setImageResource(R.mipmap.ic_launcher)
     }
+
 }
