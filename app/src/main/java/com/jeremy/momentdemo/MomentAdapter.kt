@@ -17,7 +17,7 @@ class MomentAdapter(private val momentList: List<MomentModel>) :
         const val TYPE_MOMENT = 1
     }
 
-    class HeaderViewHolder(val binding: UserHeaderBinding) : RecyclerView.ViewHolder(binding.root)
+    class HeaderViewHolder(binding: UserHeaderBinding) : RecyclerView.ViewHolder(binding.root)
 
     class MomentViewHolder(val binding: MomentItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -72,6 +72,7 @@ class MomentAdapter(private val momentList: List<MomentModel>) :
                     }
                     rvDetail.layoutManager =
                         GridLayoutManager(holder.itemView.context, getCount(momentPosition))
+                    rvDetail.addItemDecoration(GridItemDecoration(5, 5, getCount(momentPosition)))
                     val adapter = ImageAdapter(moment.photos)
                     rvDetail.adapter = adapter
                     moment.time?.let { tvTime.text = DateTimeFormat.formatMomentTime(it) }

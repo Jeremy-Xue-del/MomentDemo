@@ -1,11 +1,11 @@
 package com.jeremy.momentdemo
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jeremy.momentdemo.databinding.ActivityMainBinding
 import com.jeremy.momentdemo.model.MomentData
+import com.jeremy.momentdemo.util.ImmersiveUtils
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,9 +13,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        ImmersiveUtils().setupImmersive(
+            this,
+            topView = binding.clAppBar
+        )
         getMoment()
     }
 
@@ -27,5 +30,10 @@ class MainActivity : AppCompatActivity() {
         momentLayout.setItemViewCacheSize(20)
         val adapter = MomentAdapter(moments)
         momentLayout.adapter = adapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ImmersiveUtils().removeInsetsListener(binding.clAppBar)
     }
 }

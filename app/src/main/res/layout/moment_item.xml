@@ -75,8 +75,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="@id/tv_expand"
-        app:layout_constraintTop_toBottomOf="@id/tv_expand" />
+        app:layout_constraintTop_toBottomOf="@id/tv_expand"
+        app:layout_constraintWidth_percent="0.7" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_time"
@@ -94,6 +96,7 @@
         tool:text="昨天" />
 
     <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_more"
         android:layout_width="30dp"
         android:layout_height="20dp"
         android:layout_marginEnd="10dp"
@@ -103,5 +106,19 @@
         app:layout_constraintBottom_toBottomOf="@id/tv_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_time" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_comment"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="5dp"
+        android:visibility="gone"
+        android:background="@drawable/more_button_style"
+        app:layout_constraintEnd_toEndOf="@id/iv_more"
+        app:layout_constraintStart_toStartOf="@id/tv_time"
+        app:layout_constraintTop_toBottomOf="@id/tv_time"
+        tool:visibility="visible"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
