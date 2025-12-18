@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.AppCompatTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_moment_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:lineSpacingExtra="4dp"
+    android:textColor="#1E1E1E"
+    android:textSize="14sp">
+
+</androidx.appcompat.widget.AppCompatTextView>
