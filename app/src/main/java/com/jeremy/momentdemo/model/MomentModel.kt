@@ -18,7 +18,7 @@ data class MomentModel(
     /// 时间
     val time: Date?,
 
-    val comment: List<Comment> = emptyList()
+    val comments: List<Comment> = emptyList()
 )
 
 data class Comment(

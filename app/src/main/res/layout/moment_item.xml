@@ -107,7 +107,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_time" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.jeremy.momentdemo.util.NestedChildRecyclerView
         android:id="@+id/rv_comment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

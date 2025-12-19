@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:lineSpacingExtra="4dp"
     android:textColor="#1E1E1E"
-    android:textSize="14sp">
+    android:textSize="14sp"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
 
 </androidx.appcompat.widget.AppCompatTextView>

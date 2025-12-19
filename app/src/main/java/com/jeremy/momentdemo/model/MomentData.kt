@@ -13,11 +13,10 @@ class MomentData {
             listOf(R.drawable.background),
             Date(System.currentTimeMillis() - 10_000),
             listOf(
-                Comment(
-                    "Alice",
-                    "看起来很不错！看起来很不错！看起来很不错！看起来很不错！看起来很不错！看起来很不错！"
-                ),
-                Comment("Bob", "赞一个")
+                Comment("Olivia", "运动有益健康运动有益健康运动有益健康运动有益健康运动有益健康运动有益健康运动有益健康运动有益健康", null),
+                Comment("Peter", "下次一起吧", null),
+                Comment("Queen", "什么电影推荐一下", "Olivia"),
+                Comment("Rick", "我喜欢治愈系电影", "Queen")
             )
         ),
         MomentModel(
@@ -32,7 +31,8 @@ class MomentData {
                     "David",
                     "记得涂防晒霜哦记得涂防晒霜哦记得涂防晒霜哦记得涂防晒霜哦记得涂防晒霜哦",
                     "Cindy"
-                )
+                ),
+                Comment("Cindy", "是啊，适合出去走走"),
             )
         ),
         MomentModel(

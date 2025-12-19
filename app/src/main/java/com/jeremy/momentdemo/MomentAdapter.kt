@@ -9,96 +9,159 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jeremy.momentdemo.databinding.MomentItemBinding
 import com.jeremy.momentdemo.databinding.UserHeaderBinding
+import com.jeremy.momentdemo.model.Comment
 import com.jeremy.momentdemo.model.MomentModel
 import com.jeremy.momentdemo.util.DateTimeFormat
 
-class MomentAdapter(private val momentList: List<MomentModel>) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MomentAdapter(
+    private val momentList: List<MomentModel>
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
-        const val TYPE_HEADER = 0
-        const val TYPE_MOMENT = 1
+        private const val TYPE_HEADER = 0
+        private const val TYPE_MOMENT = 1
     }
 
-    class HeaderViewHolder(binding: UserHeaderBinding) : RecyclerView.ViewHolder(binding.root)
+    /* ---------------- ViewHolder ---------------- */
 
-    class MomentViewHolder(val binding: MomentItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class HeaderViewHolder(binding: UserHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root)
+
+    class MomentViewHolder(
+        val binding: MomentItemBinding
+    ) : RecyclerView.ViewHolder(binding.root)
+
+    /* ---------------- Adapter ---------------- */
+
+    override fun getItemCount(): Int = momentList.size + 1
+
+    override fun getItemViewType(position: Int): Int =
+        if (position == 0) TYPE_HEADER else TYPE_MOMENT
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int
+        parent: ViewGroup,
+        viewType: Int
     ): RecyclerView.ViewHolder {
         return when (viewType) {
             TYPE_HEADER -> {
                 val binding = UserHeaderBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
                 )
                 HeaderViewHolder(binding)
             }
 
             TYPE_MOMENT -> {
                 val binding = MomentItemBinding.inflate(
-                    LayoutInflater.from(parent.context), parent, false
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
                 )
                 MomentViewHolder(binding)
             }
 
-            else -> throw IllegalArgumentException("Unknown view type: $viewType")
+            else -> throw IllegalArgumentException("Unknown viewType: $viewType")
         }
     }
 
     override fun onBindViewHolder(
-        holder: RecyclerView.ViewHolder, position: Int
+        holder: RecyclerView.ViewHolder,
+        position: Int
     ) {
         when (holder) {
             is HeaderViewHolder -> {
-                // 头部视图不需要额外绑定数据
+                // header 无逻辑
             }
 
             is MomentViewHolder -> {
-                val momentPosition = position - 1 // 减去头部位置
-                val moment = momentList[momentPosition]
-                holder.binding.apply {
-                    moment.name?.let {
-                        tvName.text = it
-                    }
-                    moment.avatar?.let {
-                        ivAvatar.setImageResource(it)
-                    }
-                    moment.content?.let {
-                        tvContext.text = it
-                    }
-                    moment.time?.let { tvTime.text = DateTimeFormat.formatMomentTime(it) }
-
-                    rvDetail.layoutManager =
-                        GridLayoutManager(holder.itemView.context, getCount(momentPosition))
-                    rvDetail.addItemDecoration(GridItemDecoration(5, 5, getCount(momentPosition)))
-                    val adapter = ImageAdapter(moment.photos)
-                    rvDetail.adapter = adapter
-
-                    if (moment.comment.isNotEmpty()) {
-                        rvComment.visibility = VISIBLE
-                        rvComment.layoutManager = LinearLayoutManager(holder.itemView.context)
-                        rvComment.adapter = CommentAdapter(moment.comment)
-                    } else {
-                        rvComment.visibility = GONE
-                    }
-                }
+                val moment = momentList[position - 1]
+                bindMoment(holder, moment)
             }
         }
     }
 
-    override fun getItemViewType(position: Int): Int {
-        return if (position == 0) TYPE_HEADER else TYPE_MOMENT
+    /* ---------------- Bind ---------------- */
+
+    private fun bindMoment(
+        holder: MomentViewHolder,
+        moment: MomentModel
+    ) {
+        holder.binding.apply {
+
+            tvName.text = moment.name
+            tvContext.text = moment.content
+            moment.time?.let { tvTime.text = DateTimeFormat.formatMomentTime(it) }
+
+            moment.avatar?.let {
+                ivAvatar.setImageResource(it)
+            }
+
+            bindImages(rvDetail, moment)
+            bindComments(rvComment, moment.comments)
+        }
     }
 
-    override fun getItemCount() = momentList.size + 1 // 加上头部视图
+    /* ---------------- Images ---------------- */
 
-    fun getCount(position: Int): Int {
-        val moment = momentList[position]
-        return when (moment.photos.size) {
+    private fun bindImages(
+        rvDetail: RecyclerView,
+        moment: MomentModel
+    ) {
+        val count = when (moment.photos.size) {
             1 -> 1
             2, 4 -> 2
             else -> 3
         }
+
+        rvDetail.layoutManager =
+            GridLayoutManager(rvDetail.context, count)
+
+        rvDetail.adapter = ImageAdapter(moment.photos)
+
+        rvDetail.isNestedScrollingEnabled = false
     }
+
+    /* ---------------- Comments ---------------- */
+
+    private fun bindComments(
+        rvComment: RecyclerView,
+        comments: List<Comment>
+    ) {
+        if (comments.isEmpty()) {
+            rvComment.visibility = GONE
+            return
+        }
+
+        rvComment.visibility = VISIBLE
+
+        rvComment.layoutManager =
+            LinearLayoutManager(rvComment.context)
+
+        rvComment.adapter = CommentAdapter(comments)
+
+        rvComment.setHasFixedSize(false)
+        rvComment.isNestedScrollingEnabled = false // 必须关
+
+        // 限制高度 = 前 2 条评论高度
+        if (comments.size > 2) {
+            rvComment.post {
+                val first = rvComment.findViewHolderForAdapterPosition(0)?.itemView
+                val second = rvComment.findViewHolderForAdapterPosition(1)?.itemView
+
+                if (first != null && second != null) {
+                    val padding = rvComment.paddingTop + rvComment.paddingBottom
+                    rvComment.layoutParams = rvComment.layoutParams.apply {
+                        height = first.measuredHeight + second.measuredHeight + padding
+                    }
+                }
+            }
+        } else {
+            rvComment.layoutParams = rvComment.layoutParams.apply {
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+        }
+    }
+
+
 }
