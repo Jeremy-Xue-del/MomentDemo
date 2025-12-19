@@ -28,8 +28,15 @@ class MomentAdapter(
         RecyclerView.ViewHolder(binding.root)
 
     class MomentViewHolder(
-        val binding: MomentItemBinding
-    ) : RecyclerView.ViewHolder(binding.root)
+        val binding: MomentItemBinding,
+    ) : RecyclerView.ViewHolder(binding.root) {
+        init {
+            binding.rvComment.isNestedScrollingEnabled = false
+            val rv = binding.rvDetail
+            rv.isNestedScrollingEnabled = false
+            rv.addItemDecoration(GridItemDecoration())
+        }
+    }
 
     /* ---------------- Adapter ---------------- */
 
@@ -114,12 +121,9 @@ class MomentAdapter(
             else -> 3
         }
 
-        rvDetail.layoutManager =
-            GridLayoutManager(rvDetail.context, count)
+        rvDetail.layoutManager = GridLayoutManager(rvDetail.context, count)
 
         rvDetail.adapter = ImageAdapter(moment.photos)
-
-        rvDetail.isNestedScrollingEnabled = false
     }
 
     /* ---------------- Comments ---------------- */
@@ -141,7 +145,6 @@ class MomentAdapter(
         rvComment.adapter = CommentAdapter(comments)
 
         rvComment.setHasFixedSize(false)
-        rvComment.isNestedScrollingEnabled = false // 必须关
 
         // 限制高度 = 前 2 条评论高度
         if (comments.size > 2) {
@@ -162,6 +165,4 @@ class MomentAdapter(
             }
         }
     }
-
-
 }

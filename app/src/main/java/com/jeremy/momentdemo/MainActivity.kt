@@ -27,12 +27,15 @@ class MainActivity : AppCompatActivity() {
         val moments = MomentData().moments
         val momentLayout = binding.rvMoments
         momentLayout.layoutManager = LinearLayoutManager(this)
-        momentLayout.setItemViewCacheSize(20)
+        momentLayout.setItemViewCacheSize(10)
         // 启用嵌套滚动
         momentLayout.isNestedScrollingEnabled = true
         // 添加优化设置
         momentLayout.setHasFixedSize(false)
         momentLayout.isFocusable = false
+
+        // 设置装饰器
+        momentLayout.addItemDecoration(MomentDecoration())
         val adapter = MomentAdapter(moments)
         momentLayout.adapter = adapter
     }
